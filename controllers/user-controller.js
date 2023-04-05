@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
+const User = require('../models/user');
 const UsersBooks = require('../models/users-books');
 
 const getAllUsers = (req, res, next) => {
@@ -23,7 +24,7 @@ const getUserById = (req, res, next) => {
   res.json({ user });
 };
 
-const signupUser = (req, res, next) => {
+const signupUser = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
@@ -31,24 +32,45 @@ const signupUser = (req, res, next) => {
     );
   }
   // come back and add variables based on model
-  const { username, email, password } = req.body;
+  const { username, email, password, image, birthday, myBooks } = req.body;
 
-  const hasUser = DUMMY_DATA.find((u) => u.email === email);
-  if (hasUser) {
-    return next(
-      new HttpError('Could not create user, email already exists.', 422)
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (err) {
+    const error = new HttpError(
+      'Signup failed, please try again later.',
+      500
     );
+    return next(error);
   }
 
-  const createdUser = {
+  if (existingUser) {
+    const error = new HttpError(
+      'User already exists, please login instead.',
+      422
+    );
+    return next(error);
+  }
+
+  const createdUser = new User({
     username,
-    email,
     password,
-  };
+    email,
+    // image,
+    // birthday,
+    // myBooks,
+  });
 
-  DUMMY_DATA.push(createdUser);
+  try {
+    await createdUser.save();
+  } catch (err) {
+    console.log(err.message)
+    const error = new HttpError('Signup failed, please try again.', 500);
+    return next(error);
+  }
 
-  res.status(201).json({ user: createdUser });
+  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
 const loginUser = (req, res, next) => {

@@ -80,8 +80,9 @@ const createBook = async (req, res, next) => {
     );
     return next(error);
   }
-
-  res.status(201).json({ book: createdBook });
+  // find out why no toObject here from Max or change back if necessary
+  res.status(201).json({ book: createdBook.toObject({ getters: true }) });
+  // res.status(201).json({ book: createdBook });
 };
 
 const updateBook = async (req, res, next) => {
