@@ -18,20 +18,29 @@ const getAllUsers = async (req, res, next) => {
   res.status(200).json({users: users.map(user => user.toObject({ getters: true }))});
 };
 
-const getUserById = (req, res, next) => {
-  const userId = req.params.id;
+const getUserById = async (req, res, next) => {
+  const userId = req.params.uid;
+  let user;
 
-  const user = DUMMY_DATA.find((u) => {
-    return u.id === userId;
-  });
-
-  if (!user) {
-    return next(
-      new HttpError('Could not find a user for the provided id.', 404)
+   try {
+    user = await User.findById(userId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find user.',
+      500
     );
+    return next(error);
   }
 
-  res.json({ user });
+  if (!user) {
+    const error = new HttpError(
+      'Could not find a user for the provided id.',
+      404
+    );
+    return next(error);
+  }
+
+  res.json({ user: user.toObject({ getters: true }) });
 };
 
 const signupUser = async (req, res, next) => {
@@ -69,7 +78,7 @@ const signupUser = async (req, res, next) => {
     email,
     image,
     birthday,
-    myBooks,
+    myBooks: []
   });
 
   try {
@@ -139,21 +148,62 @@ const deleteUser = (req, res, next) => {
   res.status(200).json({ message: 'User deleted.' });
 };
 
-const addToLibrary = (req, res, next) => {
-  Users.findOneAndUpdate(
-    { uid: req.params.uid },
-    {
-      $push: { myBooks: req.params.bid },
-    },
-    { new: true }
-  )
-    .then((updatedUser) => {
-      res.status(200).json(updatedUser);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
+const addToLibrary = async (req, res, next) => {
+  const { uid, bid } = req.params;
+  let addedBook;
+  
+  try {
+    addedBook = await UsersBooks.findOne({ user: uid, book: bid });
+  } catch (err) {
+    const error = new HttpError(
+      'Adding book failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  if (addedBook) {
+    const error = new HttpError(
+      'Book already in library.',
+      422
+    );
+    return next(error);
+  }
+
+  addedBook = new UsersBooks({
+    user: uid,
+    book: bid,
+  });
+
+  try {
+    console.log(addedBook)
+    await addedBook.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Adding book to library failed, please try again.',
+      500
+    );
+    return next(error);
+  }
+
+  try {
+    await User.findOneAndUpdate(
+      { uid: req.params.uid },
+      {
+        $push: { myBooks: addedBook._id },
+      },
+      { new: true }
+    );
+    console.log(addedBook._id);
+  } catch (err) {
+    const error = new HttpError(
+      'Adding book to users library list failed, please try again.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(201).json({ usersbooks: addedBook.toObject({ getters: true }) });  
 };
 
 const deleteFromLibrary = (req, res, next) => {
