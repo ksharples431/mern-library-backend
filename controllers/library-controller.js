@@ -6,19 +6,19 @@ const Book = require('../models/book');
 const Library = require('../models/library');
 
 ////////// GET //////////
-// const getLibrary = async (req, res, next) => {
-//   let library;
-//   try {
-//     library = await Book.find();
-//   } catch (err) {
-//     const error = new HttpError(
-//       'Something went wrong, could not update book.',
-//       500
-//     );
-//     return next(error);
-//   }
-//   res.status(200).json(library);
-// }
+const getLibrary = async (req, res, next) => {
+  let library;
+  try {
+    library = await Library.find();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update book.',
+      500
+    );
+    return next(error);
+  }
+  res.status(200).json(library);
+}
 
 // const getLibraryByUser = async (req, res, next) => {
 //   const userId = req.params.uid;
@@ -71,7 +71,6 @@ const addToLibrary = async (req, res, next) => {
   });
 
   try {
-    console.log(addedBook);
     await addedBook.save();
   } catch (err) {
     const error = new HttpError(
@@ -83,13 +82,12 @@ const addToLibrary = async (req, res, next) => {
 
   try {
     await User.findOneAndUpdate(
-      { uid: req.params.uid },
+      { _id: req.params.uid },
       {
         $push: { library: addedBook._id },
       },
       { new: true }
     );
-    console.log(addedBook._id);
   } catch (err) {
     const error = new HttpError(
       'Adding book to users library list failed, please try again.',
@@ -143,7 +141,7 @@ const addToLibrary = async (req, res, next) => {
 //   });
 // };
 
-// exports.getLibrary = getLibrary;
+exports.getLibrary = getLibrary;
 // exports.getLibraryByUser = getLibraryByUser;
 exports.addToLibrary = addToLibrary;
 // exports.updateLibraryBook = updateLibraryBook;
