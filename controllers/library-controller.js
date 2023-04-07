@@ -20,30 +20,32 @@ const getLibrary = async (req, res, next) => {
   res.status(200).json(library);
 }
 
-// const getLibraryByUser = async (req, res, next) => {
-//   const userId = req.params.uid;
-//   let library;
+const getLibraryByUser = async (req, res, next) => {
+  const userId = req.params.uid;
+  let library;
+  let user;
 
-//   try {
-//     library = await Library.findById(userId);
-//   } catch (err) {
-//     const error = new HttpError(
-//       'Something went wrong, could not find library.',
-//       500
-//     );
-//     return next(error);
-//   }
+  try {
+    user = await User.findById(userId);
+    library = user.library
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find library.',
+      500
+    );
+    return next(error);
+  }
 
-//   if (!library) {
-//     const error = new HttpError(
-//       'Could not find a library for the provided user.',
-//       404
-//     );
-//     return next(error);
-//   }
+  if (!library) {
+    const error = new HttpError(
+      'Could not find a library for the provided user.',
+      404
+    );
+    return next(error);
+  }
 
-//   res.json({ library: library.toObject({ getters: true }) });
-// };
+  res.json({ library: library.toObject({ getters: true }) });
+};
 
 ////////// POST //////////
 const addToLibrary = async (req, res, next) => {
@@ -142,7 +144,7 @@ const addToLibrary = async (req, res, next) => {
 // };
 
 exports.getLibrary = getLibrary;
-// exports.getLibraryByUser = getLibraryByUser;
+exports.getLibraryByUser = getLibraryByUser;
 exports.addToLibrary = addToLibrary;
 // exports.updateLibraryBook = updateLibraryBook;
 // exports.deleteLibraryBook = deleteLibraryBook;

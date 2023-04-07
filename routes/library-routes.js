@@ -7,7 +7,7 @@ const libraryController = require('../controllers/library-controller');
 
 ////////// GET //////////
 router.get('/', libraryController.getLibrary);
-// router.get('/:uid', libraryController.getLibraryByUser)
+router.get('/:uid', libraryController.getLibraryByUser)
 
 ////////// POST //////////
 router.post('/:uid/:bid', libraryController.addToLibrary);
