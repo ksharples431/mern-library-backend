@@ -4,8 +4,18 @@ const HttpError = require('../models/http-error');
 const User = require('../models/user');
 const UsersBooks = require('../models/users-books');
 
-const getAllUsers = (req, res, next) => {
-  res.json({ users: DUMMY_DATA });
+const getAllUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({}, '-password');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching users failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+  res.status(200).json({users: users.map(user => user.toObject({ getters: true }))});
 };
 
 const getUserById = (req, res, next) => {
@@ -57,15 +67,15 @@ const signupUser = async (req, res, next) => {
     username,
     password,
     email,
-    // image,
-    // birthday,
-    // myBooks,
+    image,
+    birthday,
+    myBooks,
   });
 
   try {
     await createdUser.save();
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     const error = new HttpError('Signup failed, please try again.', 500);
     return next(error);
   }
@@ -73,15 +83,26 @@ const signupUser = async (req, res, next) => {
   res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
-const loginUser = (req, res, next) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
-  const identifiedUser = DUMMY_DATA.find((u) => u.email === email);
-
-  if (!identifiedUser || identifiedUser.password !== password) {
-    return next(
-      new HttpError('Could not identify user for provided email.', 401)
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (err) {
+    const error = new HttpError(
+      'Login failed, please try again later.',
+      500
     );
+    return next(error);
+  }
+
+  if (!existingUser || existingUser.password !== password) {
+    const error = new HttpError(
+      'Invalid credentials, could not log you in.',
+      401
+    );
+    return next(error);
   }
 
   res.json({ message: 'Logged in.' });
