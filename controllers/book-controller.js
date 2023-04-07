@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator');
 const HttpError = require('../models/http-error');
 const Book = require('../models/book');
 
+////////// GET //////////
 const getAllBooks = async (req, res, next) => {
   let books;
   try {
@@ -42,6 +43,7 @@ const getBookById = async (req, res, next) => {
   res.json({ book: book.toObject({ getters: true }) });
 };
 
+////////// POST //////////
 const createBook = async (req, res, next) => {
   const errors = validationResult(req);
 
@@ -85,6 +87,7 @@ const createBook = async (req, res, next) => {
   // res.status(201).json({ book: createdBook });
 };
 
+////////// PATCH //////////
 const updateBook = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -138,6 +141,7 @@ const updateBook = async (req, res, next) => {
     .json({ updatedBook: updatedBook.toObject({ getters: true }) });
 };
 
+////////// DELETE //////////
 const deleteBook = async (req, res, next) => {
   let book;
   try {
@@ -150,7 +154,7 @@ const deleteBook = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(200).json({ message: `${book} deleted.` });
+  res.status(200).json({ message: `${book.title} deleted.` });
 };
 
 exports.getAllBooks = getAllBooks;

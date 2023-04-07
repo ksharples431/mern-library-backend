@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-// const UsersBooks = require('../models/users-books')
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -10,7 +9,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   image: String,
   birthday: Date,
-  myBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UsersBooks' }],
+  library: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Library' }],
 });
 
 userSchema.plugin(uniqueValidator);

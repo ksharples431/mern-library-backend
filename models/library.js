@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const usersBooksSchema = new Schema({
+const LibrarySchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -20,4 +20,4 @@ const usersBooksSchema = new Schema({
   availability: Array,
 });
 
-module.exports = mongoose.model('UsersBooks', usersBooksSchema);
+module.exports = mongoose.model('Library', LibrarySchema);

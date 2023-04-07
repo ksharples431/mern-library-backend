@@ -5,25 +5,25 @@ const router = express.Router();
 
 const bookController = require('../controllers/book-controller');
 
-// Get
+////////// GET //////////
 router.get('/', bookController.getAllBooks);
 router.get('/:bid', bookController.getBookById);
 
-// Post
+////////// POST //////////
 router.post(
   '/',
   [check('title').not().isEmpty(), check('author').not().isEmpty()],
   bookController.createBook
 );
 
-// Patch
+////////// PATCH //////////
 router.patch(
   '/:bid',
   [check('title').not().isEmpty(), check('author').not().isEmpty()],
   bookController.updateBook
 );
 
-// Delete
+////////// DELETE //////////
 router.delete('/:bid', bookController.deleteBook);
 
 module.exports = router;

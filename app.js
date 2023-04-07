@@ -6,6 +6,8 @@ const HttpError = require('./models/http-error');
 
 const bookRoutes = require('./routes/book-routes');
 const userRoutes = require('./routes/user-routes');
+const authRoutes = require('./routes/auth-routes');
+const libraryRoutes = require('./routes/library-routes');
 
 const app = express();
 
@@ -13,6 +15,8 @@ app.use(bodyParser.json());
 
 app.use('/api/books', bookRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/library', libraryRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError('Could not find this route.', 404);
