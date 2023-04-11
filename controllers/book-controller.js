@@ -138,6 +138,7 @@ const updateBook = async (req, res, next) => {
 
   res
     .status(200)
+    // Do I need toObject or getters: true here or just for new instance
     .json({ updatedBook: updatedBook.toObject({ getters: true }) });
 };
 

@@ -10,24 +10,24 @@ router.get('/', userController.getAllUsers);
 router.get('/:uid', userController.getUserById);
 
 ////////// PATCH //////////
-// router.patch(
-//   '/:id',
-//   [
-//     check('username', 'Username must be at least 5 characters').isLength({
-//       min: 5,
-//     }),
-//     check(
-//       'username',
-//       'Username may not contain non alphanumeric characters'
-//     ).isAlphanumeric(),
-//     check('email', 'Email does not appear to be valid')
-//       .normalizeEmail()
-//       .isEmail(),
-//   ],
-//   userController.updateUser
-// );
+router.patch(
+  '/:uid',
+  [
+    check('username', 'Username must be at least 5 characters').isLength({
+      min: 5,
+    }),
+    check(
+      'username',
+      'Username may not contain non alphanumeric characters'
+    ).isAlphanumeric(),
+    check('email', 'Email does not appear to be valid')
+      .normalizeEmail()
+      .isEmail(),
+  ],
+  userController.updateUser
+);
 
 ////////// DELETE //////////
-router.delete('/:id', userController.deleteUser);
+router.delete('/:uid', userController.deleteUser);
 
 module.exports = router;
