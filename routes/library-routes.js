@@ -16,6 +16,6 @@ router.post('/:uid/:bid', libraryController.addToLibrary);
 // router.post('/:uid/:bid', libraryController.updateLibraryBook);
 
 ////////// DELETE //////////
-// router.delete('/:uid/:bid', libraryController.deleteLibraryBook);
+router.delete('/:uid/:bid', libraryController.deleteLibraryBook);
 
 module.exports = router;
