@@ -1,0 +1,4 @@
+127.0.0.1 - - [18/Apr/2023:21:10:55 +0000] "GET /api/books HTTP/1.1" 200 3781 "-" "PostmanRuntime/7.32.2"
+127.0.0.1 - - [18/Apr/2023:21:11:01 +0000] "POST /api/auth/login HTTP/1.1" 200 193 "-" "PostmanRuntime/7.32.2"
+127.0.0.1 - - [18/Apr/2023:21:15:31 +0000] "GET /api/books HTTP/1.1" 304 - "http://localhost:1234/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+127.0.0.1 - - [18/Apr/2023:21:21:28 +0000] "GET /api/books HTTP/1.1" 304 - "http://localhost:1234/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"

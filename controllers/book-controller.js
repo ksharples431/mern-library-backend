@@ -10,7 +10,7 @@ const getAllBooks = async (req, res, next) => {
     books = await Book.find();
   } catch (err) {
     const error = new HttpError(
-      'Something went wrong, could not update book.',
+      'Something went wrong, could not find books.',
       500
     );
     return next(error);

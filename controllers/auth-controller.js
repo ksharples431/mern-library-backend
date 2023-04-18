@@ -54,7 +54,7 @@ const signupUser = async (req, res, next) => {
 };
 
 const loginUser = async (req, res, next) => {
-  const { email, password } = req.body;
+  const {  email, password } = req.body;
 
   let existingUser;
   try {
@@ -75,7 +75,7 @@ const loginUser = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: 'Logged in.' });
+  res.json({ message: 'Logged in.', user: existingUser });
 };
 
 exports.signupUser = signupUser;

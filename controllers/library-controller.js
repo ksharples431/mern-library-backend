@@ -102,6 +102,56 @@ const addToLibrary = async (req, res, next) => {
   res.status(201).json({ library: addedBook.toObject({ getters: true }) });
 };
 
+////////// PATCH //////////
+// const updateLibraryBook = async (req, res, next) => {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return next(
+//       new HttpError('Invalid inputs passed, please check your data.', 422)
+//     );
+//   }
+
+//   const { uid, bid } = req.params;
+//   const { que, owned, read, type, availability } = req.body;
+//   let updatedBook;
+
+//   try {
+//     updatedBook = await Library.findOne({ user: uid, book: bid });
+//   } catch (err) {
+//     const error = new HttpError(
+//       'Adding book failed, please try again later.',
+//       500
+//     );
+//     return next(error);
+//   }
+
+//   if (!updatedBook) {
+//     const error = new HttpError('Could not find a book by that id.', 404);
+//     return next(error);
+//   }
+
+//   updatedBook.que = que;
+//   updatedBook.owned = owned;
+//   updatedBook.read = read;
+//   updatedBook.type = type;
+//   updatedBook.availability = availability;
+
+//   try {
+//     await updatedBook.save();
+//   } catch (err) {
+//     const error = new HttpError(
+//       'Something went wrong, could not update book.',
+//       500
+//     );
+//     return next(error);
+//   }
+
+//   res
+//     .status(200)
+//     // Do I need toObject or getters: true here or just for new instance
+//     .json({ updatedBook: updatedBook.toObject({ getters: true }) });
+// };
+
 ////////// DELETE //////////
 const deleteLibraryBook = async (req, res, next) => {
   const { uid, bid } = req.params;
@@ -119,7 +169,7 @@ const deleteLibraryBook = async (req, res, next) => {
 
   if (!book) {
     const error = new HttpError('Could not find a book by that id.', 404);
-    return next(error)
+    return next(error);
   }
 
   try {
@@ -129,7 +179,7 @@ const deleteLibraryBook = async (req, res, next) => {
       'Something went wrong, could not remove book from library.',
       500
     );
-    return next(error);    
+    return next(error);
   }
 
   try {
@@ -137,7 +187,7 @@ const deleteLibraryBook = async (req, res, next) => {
       { id: req.params.uid },
       {
         $pull: { library: book._id },
-      },
+      }
     );
   } catch (err) {
     const error = new HttpError(

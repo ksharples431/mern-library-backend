@@ -13,7 +13,7 @@ router.get('/:uid', libraryController.getLibraryByUser)
 router.post('/:uid/:bid', libraryController.addToLibrary);
 
 ////////// PATCH //////////
-// router.post('/:uid/:bid', libraryController.updateLibraryBook);
+// router.patch('/:uid/:bid', libraryController.updateLibraryBook);
 
 ////////// DELETE //////////
 router.delete('/:uid/:bid', libraryController.deleteLibraryBook);
