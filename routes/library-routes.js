@@ -4,6 +4,9 @@ const { check } = require('express-validator');
 const router = express.Router();
 
 const libraryController = require('../controllers/library-controller');
+const checkAuth = require('../middleware/check-auth');
+
+router.use(checkAuth);
 
 ////////// GET //////////
 router.get('/', libraryController.getLibrary);

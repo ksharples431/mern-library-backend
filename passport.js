@@ -3,7 +3,7 @@
 //   passportJWT = require('passport-jwt');
 //   UserModel = require('./models/user');
 
-// let Users = UserModel
+// let Users = UserModel,
 //   JWTStrategy = passportJWT.Strategy,
 //   ExtractJWT = passportJWT.ExtractJwt;
 
@@ -28,10 +28,10 @@
 //           });
 //         }
 
-//         if (!user.validatePassword(password)) {
-//           console.log('incorrect password');
-//           return callback(null, false, { message: 'Incorrect password.' });
-//         }
+//         // if (!user.validatePassword(password)) {
+//         //   console.log('incorrect password');
+//         //   return callback(null, false, { message: 'Incorrect password.' });
+//         // }
 
 //         console.log('finished');
 //         return callback(null, user);
@@ -44,7 +44,7 @@
 //   new JWTStrategy(
 //     {
 //       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-//       secretOrKey: 'your_jwt_secret',
+//       secretOrKey: 'process.env.SECRET_KEY',
 //     },
 //     (jwtPayload, callback) => {
 //       return Users.findById(jwtPayload._id)
