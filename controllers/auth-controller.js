@@ -14,7 +14,7 @@ const signupUser = async (req, res, next) => {
     );
   }
 
-  const { username, email, password, image, birthday } = req.body;
+  const { username, email, password, birthday } = req.body;
 
   let existingUser;
   try {
@@ -50,24 +50,26 @@ const signupUser = async (req, res, next) => {
     username,
     password: hashedPassword,
     email,
-    image,
+    // image,
     // fix this with file upload
     // image: req.file.path
     birthday,
-    library: [],
+    // library: [],
   });
 
   try {
     await createdUser.save();
+    console.log(createdUser)
   } catch (err) {
     const error = new HttpError('Signup failed, please try again.', 500);
     return next(error);
   }
-
   let token;
   try {
+    /// try just sending whoe existing user
     token = jwt.sign(
-      { userId: createdUser.id, email: createdUser.email },
+      // { userId: createdUser.id, email: createdUser.email},
+      { user: createdUser.id },
       'process.env.SECRET_KEY',
       { expiresIn: '7d' }
     );
@@ -79,8 +81,7 @@ const signupUser = async (req, res, next) => {
   res
     .status(201)
     .json({
-      userId: createdUser.id,
-      email: createdUser.email,
+      user: createdUser.id,
       token: token,
     });
 };
@@ -132,7 +133,8 @@ const loginUser = async (req, res, next) => {
   let token;
   try {
     token = jwt.sign(
-      { userId: existingUser.id, email: existingUser.email, user: existingUser },
+      // { userId: existingUser.id, email: existingUser.email, user: existingUser },
+      { user: existingUser.id },
       'process.env.SECRET_KEY',
       { expiresIn: '7d' }
     );
@@ -143,9 +145,9 @@ const loginUser = async (req, res, next) => {
 
   res.json({
     message: 'Logged in.',
-    user: existingUser,
-    userId: existingUser.id,
-    email: existingUser.email,
+    // userId: existingUser.id,
+    // email: existingUser.email,
+    user: existingUser.id,
     token: token,
   });
 };
