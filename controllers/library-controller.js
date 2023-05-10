@@ -51,6 +51,7 @@ const getLibraryByUser = async (req, res, next) => {
 ////////// POST //////////
 const addToLibrary = async (req, res, next) => {
   const { uid, bid } = req.params;
+  console.log(uid, bid)
   let addedBook;
 
   try {
@@ -70,8 +71,10 @@ const addToLibrary = async (req, res, next) => {
 
   addedBook = new Library({
     user: uid,
-    book: bid,
+    book: bid
   });
+
+  console.log(addedBook)
 
   try {
     await addedBook.save();

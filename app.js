@@ -94,12 +94,12 @@ app.use((error, req, res, next) => {
 });
 
 // Database
+mongoose.set('strictQuery', false);
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-// mongoose.set('strictQuery', false);
-mongoose.set('strictQuery', true);
+// mongoose.set('strictQuery', true);
 
 // Listen for requests
 const port = process.env.PORT || 5000;
