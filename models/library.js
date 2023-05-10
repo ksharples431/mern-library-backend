@@ -17,7 +17,7 @@ const LibrarySchema = new Schema({
   owned: Boolean,
   read: Boolean,
   type: Array,
-  availability: Array,
+  availability: Array
 });
 
 module.exports = mongoose.model('Library', LibrarySchema);
