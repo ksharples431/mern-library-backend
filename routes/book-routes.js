@@ -7,7 +7,7 @@ const bookController = require('../controllers/book-controller');
 
 ////////// GET //////////
 router.get('/', bookController.getAllBooks);
-router.get('/:bid', bookController.getBookById);
+router.get('/:uid/:bid', bookController.getBookById);
 
 ////////// POST //////////
 router.post(

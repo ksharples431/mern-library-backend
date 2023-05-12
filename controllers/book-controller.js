@@ -2,6 +2,8 @@ const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
 const Book = require('../models/book');
+// const User = require('../models/user');
+const Library = require('../models/library');
 
 ////////// GET //////////
 const getAllBooks = async (req, res, next) => {
@@ -20,7 +22,12 @@ const getAllBooks = async (req, res, next) => {
 
 const getBookById = async (req, res, next) => {
   const bookId = req.params.bid;
+  const userId = req.params.uid;
+  console.log(userId)
   let book;
+  // let user;
+  let libraryBook;
+  let inLibrary = false;
 
   try {
     book = await Book.findById(bookId);
@@ -31,6 +38,15 @@ const getBookById = async (req, res, next) => {
     );
     return next(error);
   }
+  // try {
+  //   user = await User.findById(userId);
+  // } catch (err) {
+  //   const error = new HttpError(
+  //     'Something went wrong, could not find user.',
+  //     500
+  //   );
+  //   return next(error);
+  // }
 
   if (!book) {
     const error = new HttpError(
@@ -40,7 +56,25 @@ const getBookById = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ book: book.toObject({ getters: true }) });
+  try {
+    libraryBook = await Library.find({ user: userId, book: bookId });
+    if (Object.keys(libraryBook).length === 0) {
+      inLibrary = false;
+    } else {
+      inLibrary = true;
+    }
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not find book.',
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    book: book.toObject({ getters: true }),
+    inLibrary: inLibrary,
+  });
 };
 
 ////////// POST //////////
